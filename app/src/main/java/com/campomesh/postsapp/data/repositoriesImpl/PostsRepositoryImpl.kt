@@ -14,6 +14,10 @@ class PostsRepositoryImpl @Inject constructor(
         return postsApiService.getPosts().map { it.toPost() }
     }
 
+    override suspend fun getPostByQuery(query: String): List<Post> {
+        return postsDao.getPostsByQuery(query).map { it.toPost() }
+    }
+
     override suspend fun savePosts(posts: List<Post>): Boolean {
         return postsDao.insertAll(posts.map { it.toDbPost() }).all { it != -1L }
     }

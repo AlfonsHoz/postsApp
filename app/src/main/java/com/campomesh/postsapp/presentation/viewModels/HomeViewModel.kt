@@ -8,6 +8,7 @@ import com.campomesh.postsapp.core.navigation.NavRoutes
 import com.campomesh.postsapp.domain.models.Post
 import com.campomesh.postsapp.domain.useCases.GetPostsUseCase
 import com.campomesh.postsapp.domain.useCases.SavePostsUseCase
+import com.campomesh.postsapp.domain.useCases.SearchPostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,12 +21,16 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase,
     private val savePostsUseCase: SavePostsUseCase,
+    private val searchPostsUseCase: SearchPostsUseCase,
     appNavigator: AppNavigator,
     toastEvents: ToastEvents
 ) : BaseViewModel(appNavigator, toastEvents) {
 
-    private val _posts = MutableStateFlow<List<Post>>(emptyList())
-    val posts: StateFlow<List<Post>> = _posts.asStateFlow()
+    private val _postsState = MutableStateFlow<List<Post>>(emptyList())
+    val posts: StateFlow<List<Post>> = _postsState.asStateFlow()
+
+    private val _queryState = MutableStateFlow<String>("")
+    val query = _queryState.asStateFlow()
 
     private val _postSavedState = MutableStateFlow<Boolean>(false)
 
@@ -36,8 +41,8 @@ class HomeViewModel @Inject constructor(
     private fun loadPosts() {
         loadingState.value = true
         viewModelScope.launch {
-            _posts.value = getPostsUseCase.invoke()
-            if (_posts.value.isNotEmpty())
+            _postsState.value = getPostsUseCase.invoke()
+            if (_postsState.value.isNotEmpty())
                 savePosts()
             else
                 loadingState.value = false
@@ -46,7 +51,7 @@ class HomeViewModel @Inject constructor(
 
     private fun savePosts() {
         viewModelScope.launch(context = Dispatchers.IO) {
-            _postSavedState.value = savePostsUseCase.invoke(_posts.value)
+            _postSavedState.value = savePostsUseCase.invoke(_postsState.value)
             if (!_postSavedState.value) {
                 showToast("Error saving posts")
             }
@@ -56,5 +61,12 @@ class HomeViewModel @Inject constructor(
 
     fun onPostClick(postIndex: Int) {
         appNavigator.navigateTo(NavRoutes.PostDetailsScreen.createRoute(posts.value[postIndex].id))
+    }
+
+    fun onQueryChange(queryValue: String) {
+        _queryState.value = queryValue
+        viewModelScope.launch(context = Dispatchers.IO) {
+            _postsState.value = searchPostsUseCase.invoke(queryValue)
+        }
     }
 }

@@ -11,6 +11,9 @@ interface PostsDao {
     @Query("SELECT * FROM posts")
     suspend fun getAllPosts(): List<PostEntity>
 
+    @Query("SELECT * FROM posts WHERE title LIKE '%' || :query || '%' OR CAST(id as TEXT) LIKE '%' || :query || '%'")
+    suspend fun getPostsByQuery(query: String): List<PostEntity>
+
     @Query("SELECT * FROM posts WHERE id = :postId")
     suspend fun getPostById(postId: Int): PostEntity
 
