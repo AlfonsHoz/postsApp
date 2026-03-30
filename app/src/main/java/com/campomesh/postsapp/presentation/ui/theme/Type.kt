@@ -1,4 +1,4 @@
-package com.postsapp.presentation.ui.theme
+package com.campomesh.postsapp.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

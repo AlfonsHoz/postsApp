@@ -1,14 +1,14 @@
-package com.postsapp.core.navigation
+package com.campomesh.postsapp.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-import com.postsapp.presentation.ui.screens.HomeScreen
+import com.campomesh.postsapp.presentation.ui.screens.HomeScreen
 
 @Composable
-fun NavRoutes(
+fun NavService(
     navController: NavHostController = rememberNavController(),
     startDestination: String
 ) {

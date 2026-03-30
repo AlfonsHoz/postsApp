@@ -1,32 +1,31 @@
-package com.postsapp
+package com.campomesh.postsapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.postsapp.presentation.ui.theme.PostsAppTheme
+import com.campomesh.postsapp.core.navigation.NavService
+import com.campomesh.postsapp.core.navigation.Screens
+import com.campomesh.postsapp.presentation.ui.theme.PostsAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PostsApp()
+            PostsAppTheme {
+                PostsApp()
+            }
         }
     }
 }
 
 @Composable
 fun PostsApp() {
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PostsAppPreview() {
-    PostsAppTheme {
-        PostsApp()
-    }
+    NavService(
+        startDestination = Screens.HomeScreen.route
+    )
 }

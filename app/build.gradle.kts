@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -53,6 +55,18 @@ dependencies {
     //navigation
     implementation(libs.androidx.navigation.compose)
 
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+
+    //logging
+    implementation(libs.logging.okhttp)
+
+    //hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
+    annotationProcessor(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -61,4 +75,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // For instrumentation tests
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestAnnotationProcessor(libs.hilt.compiler)
+
+    // For local unit tests
+    testImplementation(libs.hilt.android.testing)
 }
