@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.campomesh.postsapp.core.extensions.isBack
 import com.campomesh.postsapp.presentation.ui.screens.HomeScreen
 import com.campomesh.postsapp.presentation.ui.screens.PostDetailsScreen
 import kotlinx.coroutines.flow.collectLatest
@@ -19,24 +20,27 @@ fun NavService(
 ) {
     LaunchedEffect(Unit) {
         appNavigator.navigationEvents.collectLatest { route ->
-            navController.navigate(route)
+            if (route.isBack())
+                navController.popBackStack()
+            else
+                navController.navigate(route)
         }
     }
 
     NavHost(
         navController = navController,
-        startDestination = Screens.HomeScreen.route
+        startDestination = NavRoutes.HomeScreen.route
     ) {
-        composable(route = Screens.HomeScreen.route) {
+        composable(route = NavRoutes.HomeScreen.route) {
             HomeScreen()
         }
 
         composable(
-            route = Screens.PostDetailsScreen.route,
+            route = NavRoutes.PostDetailsScreen.route,
             arguments = listOf(navArgument("postId") { type = NavType.IntType })
         ) { backStackEntry ->
             val postId = backStackEntry.arguments?.getInt("postId") ?: 0
-            PostDetailsScreen(postId)
+            PostDetailsScreen(postId = postId)
         }
     }
 }

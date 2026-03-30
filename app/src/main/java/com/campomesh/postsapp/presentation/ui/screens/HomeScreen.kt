@@ -19,10 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.campomesh.postsapp.presentation.ui.components.AppBar
+import com.campomesh.postsapp.presentation.ui.components.LoadingIndicator
 import com.campomesh.postsapp.presentation.ui.components.Postcard
 import com.campomesh.postsapp.presentation.viewModels.HomeViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
     val posts = homeViewModel.posts.collectAsState().value
@@ -30,12 +31,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
     return Scaffold(
         modifier = Modifier.fillMaxSize(), topBar = {
-            TopAppBar(title = { Text("Posts") })
+            AppBar(title = "Posts")
         }) { innerPadding ->
         if (loading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+            LoadingIndicator()
         } else {
             LazyColumn(
                 modifier = Modifier.padding(innerPadding),

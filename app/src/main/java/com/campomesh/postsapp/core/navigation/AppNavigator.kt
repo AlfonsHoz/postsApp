@@ -10,8 +10,8 @@ class AppNavigator @Inject constructor() {
     private val _navigationEvents = Channel<String>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
 
-    fun navigateTo(screen: Screens) {
-        _navigationEvents.trySend(screen.route)
+    fun navigateTo(route: NavRoutes) {
+        _navigationEvents.trySend(route.route)
     }
 
     fun navigateTo(route: String) {
