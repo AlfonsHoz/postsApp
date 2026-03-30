@@ -7,11 +7,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SavePostsUseCase @Inject constructor(private val postsRepository: PostsRepository) {
-    suspend operator fun invoke(posts: List<Post>): Boolean = try {
-        postsRepository.savePosts(posts)
+class GetPostUseCase @Inject constructor(private val postsRepository: PostsRepository) {
+    suspend operator fun invoke(id: Int): Post? = try {
+        postsRepository.getPost(id)
     } catch (exception: Exception) {
-        Log.d("GetPostUseCase", "Error Inserting posts", exception)
-        false
+        Log.d("GetPostUseCase", "Error getting post", exception)
+        null
     }
 }

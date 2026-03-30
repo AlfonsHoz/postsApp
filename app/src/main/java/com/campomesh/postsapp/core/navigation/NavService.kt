@@ -38,9 +38,8 @@ fun NavService(
         composable(
             route = NavRoutes.PostDetailsScreen.route,
             arguments = listOf(navArgument("postId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val postId = backStackEntry.arguments?.getInt("postId") ?: 0
-            PostDetailsScreen(postId = postId)
+        ) {
+            PostDetailsScreen()
         }
     }
 }

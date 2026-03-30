@@ -47,8 +47,8 @@ class HomeViewModel @Inject constructor(
     private fun savePosts() {
         viewModelScope.launch(context = Dispatchers.IO) {
             _postSavedState.value = savePostsUseCase.invoke(_posts.value)
-            if (!_postSavedState.value) {//showToast
-
+            if (!_postSavedState.value) {
+                showToast("Error saving posts")
             }
             loadingState.value = false
         }

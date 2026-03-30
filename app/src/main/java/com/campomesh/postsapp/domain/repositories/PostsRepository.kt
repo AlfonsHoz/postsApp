@@ -7,4 +7,6 @@ interface PostsRepository {
     suspend fun getPosts(): List<Post>
 
     suspend fun savePosts(posts: List<Post>): Boolean
+
+    suspend fun getPost(id: Int): Post
 }
