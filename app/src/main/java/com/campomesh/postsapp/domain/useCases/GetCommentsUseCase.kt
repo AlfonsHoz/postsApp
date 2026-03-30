@@ -12,7 +12,6 @@ class GetCommentsUseCase @Inject constructor(private val commentsRepository: Com
         try {
             commentsRepository.getCommentsForPost(postId)
         } catch (exception: Exception) {
-            Log.d("GetCommentsUseCase", exception.message ?: "")
             listOf()
         }
 }

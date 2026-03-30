@@ -1,7 +1,6 @@
 package com.campomesh.postsapp.data.repositoriesImpl
 
 import com.campomesh.postsapp.data.database.dao.CommentDao
-import com.campomesh.postsapp.data.database.entities.CommentsEntity
 import com.campomesh.postsapp.domain.models.Comment
 import com.campomesh.postsapp.domain.repositories.CommentsRepository
 import javax.inject.Inject

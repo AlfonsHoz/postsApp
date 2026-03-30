@@ -12,7 +12,6 @@ class SearchPostsUseCase @Inject constructor(private val postsRepository: PostsR
         try {
             postsRepository.getPostByQuery(query)
         } catch (exception: Exception) {
-            Log.d("SearchPostsUseCase", "Error searching posts", exception)
             emptyList()
         }
 }

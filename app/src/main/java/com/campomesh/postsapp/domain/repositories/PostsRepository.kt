@@ -10,5 +10,5 @@ interface PostsRepository {
 
     suspend fun savePosts(posts: List<Post>): Boolean
 
-    suspend fun getPost(id: Int): Post
+    suspend fun getPost(id: Int): Post?
 }

@@ -17,7 +17,6 @@ class SaveCommentUseCase @Inject constructor(private val commentsRepository: Com
                 )
             ) != -1L
         } catch (exception: Exception) {
-            Log.d("SaveCommentUseCase", exception.message ?: "")
             false
         }
 }

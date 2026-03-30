@@ -11,7 +11,6 @@ class GetPostsUseCase @Inject constructor(private val postsRepository: PostsRepo
     suspend operator fun invoke(): List<Post> = try {
         postsRepository.getPosts()
     } catch (exception: Exception) {
-        Log.d("GetPostUseCase", "Error getting posts from api", exception)
         emptyList()
     }
 }

@@ -11,7 +11,6 @@ class SavePostsUseCase @Inject constructor(private val postsRepository: PostsRep
     suspend operator fun invoke(posts: List<Post>): Boolean = try {
         postsRepository.savePosts(posts)
     } catch (exception: Exception) {
-        Log.d("GetPostUseCase", "Error Inserting posts", exception)
         false
     }
 }
