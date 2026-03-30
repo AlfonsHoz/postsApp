@@ -1,5 +1,6 @@
 package com.campomesh.postsapp.presentation.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,16 +34,22 @@ fun Postcard(post: Post) =
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text = post.title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = "${post.id}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = post.title,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
                 Text(
                     text = post.body,
                     maxLines = 1,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 12.sp
+                    fontSize = 16.sp
                 )
             }
             Icon(

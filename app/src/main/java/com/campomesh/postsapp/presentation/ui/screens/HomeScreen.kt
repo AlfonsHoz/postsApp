@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Clear
@@ -20,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +30,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.campomesh.postsapp.presentation.ui.components.AppBar
 import com.campomesh.postsapp.presentation.ui.components.LoadingIndicator
 import com.campomesh.postsapp.presentation.ui.components.Postcard
+import com.campomesh.postsapp.presentation.ui.components.SearchPosts
 import com.campomesh.postsapp.presentation.viewModels.HomeViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
@@ -37,6 +41,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
     val query = homeViewModel.query.collectAsState().value
 
     val focusManager = LocalFocusManager.current
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     return Scaffold(
         modifier = Modifier.fillMaxSize(), topBar = {
@@ -45,50 +51,32 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
         if (loading) {
             LoadingIndicator()
         } else {
-            Column(modifier = Modifier.padding(innerPadding)) {
-                OutlinedTextField(
-                    value = query,
-                    onValueChange = { homeViewModel.onQueryChange(it) },
-                    label = { Text("Search") },
-                    placeholder = { Text("Buscar posts...") },
-                    singleLine = true,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Buscar"
-                        )
-                    },
-                    trailingIcon = {
-                        if (query.isNotEmpty()) {
-                            IconButton(
-                                onClick = {
-                                    homeViewModel.onQueryChange("")
-                                    focusManager.clearFocus()
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Clear,
-                                    contentDescription = "Limpiar"
-                                )
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                item {
+                    SearchPosts(
+                        query = query,
+                        onValueChange = {
+                            homeViewModel.onQueryChange(it)
+                        },
+                        onClearClick = {
+                            homeViewModel.onQueryChange("")
+                            focusManager.clearFocus()
+                            coroutineScope.launch {
+                                listState.animateScrollToItem(0)
                             }
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp)
-                )
-                LazyColumn(
-                    contentPadding = PaddingValues(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    items(
-                        posts.size, key = { posts[it].id }) { index ->
-                        Box(modifier = Modifier.clickable() {
-                            homeViewModel.onPostClick(index)
-                            focusManager.clearFocus()
-                        }) {
-                            Postcard(post = posts[index])
-                        }
+                    )
+                }
+
+                items(
+                    posts.size, key = { posts[it].id }) { index ->
+                    Box(modifier = Modifier.clickable() {
+                        homeViewModel.onPostClick(index)
+                        focusManager.clearFocus()
+                    }) {
+                        Postcard(post = posts[index])
                     }
                 }
             }
