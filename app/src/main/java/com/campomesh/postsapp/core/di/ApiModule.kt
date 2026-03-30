@@ -18,14 +18,6 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit =
-        Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-    @Provides
-    @Singleton
     fun providesLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -36,6 +28,15 @@ object ApiModule {
     fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor) =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://jsonplaceholder.typicode.com")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
     @Provides

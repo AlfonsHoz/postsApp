@@ -5,27 +5,31 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import com.campomesh.postsapp.core.navigation.AppNavigator
 import com.campomesh.postsapp.core.navigation.NavService
-import com.campomesh.postsapp.core.navigation.Screens
 import com.campomesh.postsapp.presentation.ui.theme.PostsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var appNavigator: AppNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             PostsAppTheme {
-                PostsApp()
+                PostsApp(appNavigator)
             }
         }
     }
 }
 
 @Composable
-fun PostsApp() {
+fun PostsApp(appNavigator: AppNavigator) {
     NavService(
-        startDestination = Screens.HomeScreen.route
+        appNavigator = appNavigator
     )
 }
