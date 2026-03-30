@@ -1,8 +1,9 @@
 package com.campomesh.postsapp.data.models
 
+import com.campomesh.postsapp.domain.models.Post
 import com.google.gson.annotations.SerializedName
 
-data class Post(
+data class ApiPost(
     @SerializedName("id")
     val id: Int,
     @SerializedName("userId")
@@ -11,4 +12,6 @@ data class Post(
     val title: String,
     @SerializedName("body")
     val body: String
-)
+) {
+    fun toPost(): Post = Post(id, userId, title, body)
+}

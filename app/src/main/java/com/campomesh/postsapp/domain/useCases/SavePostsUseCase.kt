@@ -6,6 +6,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetPostsUseCase @Inject constructor(private val postsRepository: PostsRepository) {
-    suspend operator fun invoke(): List<Post> = postsRepository.getPosts()
+class SavePostsUseCase @Inject constructor(private val postsRepository: PostsRepository) {
+    suspend operator fun invoke(posts: List<Post>): Boolean = postsRepository.savePosts(posts)
 }

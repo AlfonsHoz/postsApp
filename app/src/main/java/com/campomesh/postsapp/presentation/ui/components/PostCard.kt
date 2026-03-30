@@ -1,6 +1,5 @@
 package com.campomesh.postsapp.presentation.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.campomesh.postsapp.R
-import com.campomesh.postsapp.data.models.Post
+import com.campomesh.postsapp.domain.models.Post
 
 @Composable
 fun Postcard(post: Post) =
