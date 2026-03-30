@@ -3,7 +3,6 @@ package com.campomesh.postsapp.core.di
 import android.content.Context
 import androidx.room.Room
 import com.campomesh.postsapp.core.database.AppDatabase
-import com.campomesh.postsapp.data.database.dao.PostsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,9 +17,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "app_database").build()
-
-    @Provides
-    @Singleton
-    fun providePostsDao(database: AppDatabase): PostsDao = database.postsDao()
+        Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
+            .fallbackToDestructiveMigration(true) //Solo para desarrollo
+            .build()
 }

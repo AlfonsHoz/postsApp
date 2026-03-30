@@ -1,6 +1,5 @@
 package com.campomesh.postsapp.core.di
 
-import com.campomesh.postsapp.data.datasources.PostsApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,7 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-import kotlin.apply
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -38,10 +36,4 @@ object ApiModule {
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-    @Provides
-    @Singleton
-    fun providesPostsApiService(retrofit: Retrofit): PostsApiService {
-        return retrofit.create(PostsApiService::class.java)
-    }
 }

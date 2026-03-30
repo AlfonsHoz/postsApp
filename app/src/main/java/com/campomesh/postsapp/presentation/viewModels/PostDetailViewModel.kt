@@ -6,7 +6,9 @@ import com.campomesh.postsapp.core.base.BaseViewModel
 import com.campomesh.postsapp.core.events.ToastEvents
 import com.campomesh.postsapp.core.navigation.AppNavigator
 import com.campomesh.postsapp.domain.models.Post
+import com.campomesh.postsapp.domain.useCases.GetCommentsUseCase
 import com.campomesh.postsapp.domain.useCases.GetPostUseCase
+import com.campomesh.postsapp.domain.useCases.SaveCommentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
     private val getPostsUseCase: GetPostUseCase,
+    private val saveCommentUseCase: SaveCommentUseCase,
+    private val getCommentsUseCase: GetCommentsUseCase,
     savedStateHandle: SavedStateHandle,
     appNavigator: AppNavigator,
     toastEvents: ToastEvents
@@ -44,7 +48,7 @@ class PostDetailViewModel @Inject constructor(
             if (_postState.value == null) {
                 showToast("Error getting post")
             }
-            loadingState.value = false
+            getComments()
         }
     }
 
@@ -52,12 +56,21 @@ class PostDetailViewModel @Inject constructor(
         loadingState.value = true
         viewModelScope.launch(context = Dispatchers.IO) {
             if (comment.value.isNotEmpty()) {
-                _commentsState.value = _commentsState.value + comment.value
-                showToast("Comment sent")
-                _commentState.value = ""
+                val saved = saveCommentUseCase.invoke(comment = comment.value, postId = postId)
+                if (saved){
+                    _commentState.value = ""
+                    getComments()
+                }
             } else {
                 showToast("Comment cannot be empty")
             }
+            loadingState.value = false
+        }
+    }
+
+    private fun getComments() {
+        viewModelScope.launch(context = Dispatchers.IO) {
+            _commentsState.value = getCommentsUseCase.invoke(postId).map { it.comment }
             loadingState.value = false
         }
     }
