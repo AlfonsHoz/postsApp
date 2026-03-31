@@ -139,3 +139,6 @@ git clone https://github.com/AlfonsHoz/postsApp
 ### Post con comentarios diferentes guardados
 
 ![Post con comentarios](img_3.png)
+
+### Tests corriendo (resultado de Githubactions)
+![img_4.png](img_4.png)
